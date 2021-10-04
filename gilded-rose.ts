@@ -17,6 +17,14 @@ export class GildedRose {
         this.items = items;
     }
 
+    improveQuality(item: Item) {
+        item.quality += 1;
+    }
+
+    deteriorateQuality(item: Item) {
+        item.quality -= 1;
+    }
+
     updateQuality() {
         this.items.forEach(item => {
             // Casos especiais
@@ -29,15 +37,15 @@ export class GildedRose {
                     item.quality = 0;
                 }
                 else if (item.sellIn < 11) {
-                    item.quality = item.quality + 1
+                    this.improveQuality(item);
                 }
                 return;
             }
 
             if (item.name === 'Aged Brie') {
-                item.quality = item.quality + 1
+                this.improveQuality(item);
                 if (item.sellIn < 0) {        
-                    item.quality = item.quality + 1
+                    this.improveQuality(item);
                 }
                 return;
             }
@@ -46,13 +54,11 @@ export class GildedRose {
             item.sellIn = item.sellIn - 1;
 
             if (item.quality > 0) {
-                item.quality = item.quality - 1
+                this.deteriorateQuality(item);
             }
 
-            if (item.sellIn < 0) {
-                if (item.quality > 0) {
-                    item.quality = item.quality - 1
-                }
+            if (item.sellIn < 0 && item.quality > 0) {
+                this.deteriorateQuality(item);
             }
 
         });
